@@ -12,7 +12,7 @@ def main():
             # names = [result.names[cls.item()] for cls in result.obb.cls.int()]  # class name of each box
             # confs = result.obb.conf  # confidence score of each box
             pass
-        print(f"検出したバウンディングボックス:{len(results)}")
+        print(f"{i}枚目の検出したバウンディングボックス:{len(results)}")
 
 if __name__ == "__main__":
     main()
