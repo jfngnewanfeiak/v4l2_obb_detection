@@ -20,7 +20,7 @@ def generate_launch_description():
         name="v4l2_camera_node",
         namespace="v4l2_camera",
         parameters=[
-            {"video_device":"/dev/video2"}
+            {"video_device":"/dev/video0"}
         ]
     )
 
