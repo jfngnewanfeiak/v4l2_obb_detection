@@ -1,18 +1,49 @@
 from ultralytics import YOLO 
+from PIL import Image
+
 LOOP = 14
 def main():
     model = YOLO("/home/user/ros2_ws/src/run_test/run_test/sikitumeta_best.pt")
+    output_text = ""
+    output_dir = ""
     for i in range(LOOP):
-
+        
         results = model(f"/home/user/ros2_ws/src/run_test/run_test/image{i}.png",save=True)
-        idx = 0
-        for result in results:
+        # for result in results:
             # xywhr = result.obb.xywhr  # center-x, center-y, width, height, angle (radians)
             # xyxyxyxy = result.obb.xyxyxyxy  # polygon format with 4-points
             # names = [result.names[cls.item()] for cls in result.obb.cls.int()]  # class name of each box
             # confs = result.obb.conf  # confidence score of each box
-            idx = idx + 1
-        print(f"{i}枚目の検出したバウンディングボックス:{idx}")
+        obb_boxes = results[0].obb
+        num_boxes = obb_boxes.xywhr.shape[0]
+        print(f"{i}枚目の検出したバウンディングボックス:{num_boxes}")
+        
+        output_text += f"image{i},{num_boxes}\n"
+        output_dir = results[0].save_dir
+
+    with open(f"{output_dir}/boxes.txt", "w") as txt:
+        txt.write(output_text)
+    
+    del model
+    del results
+
+    for i in range(LOOP):
+        img = Image.open(f'{output_dir}/image{i}.jpg')
+
+        img.show()
+
+        count_box = int(input("数えたやつを入力"))
+
+        with open(f"{output_dir}/boxes.txt", "r") as read_txt:
+            data = read_txt.readlines()
+            with open(f"{output_dir}/result.txt","w") as result_txt:
+                for idx in range(len(data)):
+                    back_slash_idx = data[idx].find("\n")
+                    data[idx] = data[idx][:back_slash_idx] + f",{count_box}\n"
+                
+                output_text = "".join(data)
+                result_txt.write(output_text)
+
 
 if __name__ == "__main__":
     main()
