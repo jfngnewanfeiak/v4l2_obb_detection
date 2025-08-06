@@ -38,9 +38,9 @@ def main():
             data = read_txt.readlines()
             with open(f"{output_dir}/result.txt","w") as result_txt:
                 for idx in range(len(data)):
+                    split_data = data[idx].split(",")
                     back_slash_idx = data[idx].find("\n")
-                    data[idx] = data[idx][:back_slash_idx] + f",{count_box}\n"
-                
+                    data[idx] = data[idx][:back_slash_idx] + f",{count_box},{count_box / split_data[1]}\n"
                 output_text = "".join(data)
                 result_txt.write(output_text)
 
