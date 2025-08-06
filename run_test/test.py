@@ -26,6 +26,10 @@ def main():
     
     del model
     del results
+    
+    
+    with open(f"{output_dir}/boxes.txt", "r") as read_txt:
+            data = read_txt.readlines()
 
     for i in range(LOOP):
         img = Image.open(f'{output_dir}/image{i}.jpg')
@@ -34,15 +38,13 @@ def main():
 
         count_box = int(input("数えたやつを入力"))
 
-        with open(f"{output_dir}/boxes.txt", "r") as read_txt:
-            data = read_txt.readlines()
-            with open(f"{output_dir}/result.txt","w") as result_txt:
-                for idx in range(len(data)):
-                    split_data = data[idx].split(",")
-                    back_slash_idx = data[idx].find("\n")
-                    data[idx] = data[idx][:back_slash_idx] + f",{count_box},{count_box / split_data[1]}\n"
-                output_text = "".join(data)
-                result_txt.write(output_text)
+        split_data = data[i].split(',')
+        back_slash_idx = data[i].find('\n')
+        data[i] = data[i][:back_slash_idx] + f",{count_box},{count_box / int(split_data[1])}\n"
+    
+    with open(f"{output_dir}/result.txt","w") as result_txt:
+        output_text = "".join(data)
+        result_txt.write(output_text)
 
 
 if __name__ == "__main__":
